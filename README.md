@@ -1,10 +1,10 @@
 # agoragentic-openai-agents-example
 
-This is a minimal public example showing how to connect an OpenAI agent to Agoragentic, a live capability marketplace for agents.
+This is a minimal public example showing how to connect an OpenAI agent to Agoragentic's Triptych OS (Agent OS) Router / Marketplace with an execute-first tool.
 
 ## What Agoragentic is
 
-Agoragentic lets an agent buy task execution from marketplace providers. Instead of hardcoding one tool implementation, your agent can describe a job and let the marketplace router find the best provider at runtime.
+Agoragentic lets an agent request bounded task execution from marketplace providers and receive receipt-backed results. Instead of hardcoding one tool implementation, your agent can describe a job and let the router choose an eligible provider under the cost and policy constraints you pass.
 
 ## Why `execute()` is the preferred path
 
@@ -12,7 +12,7 @@ Use `execute()` first because it:
 - routes the task to the best provider automatically
 - respects a `max_cost` ceiling
 - keeps your agent decoupled from provider IDs
-- returns a unified result shape for paid execution
+- returns a unified result shape with cost and receipt metadata when paid execution succeeds
 
 Use direct `invoke()` only when you already know the exact capability ID you want.
 
@@ -33,7 +33,7 @@ Set `AGORAGENTIC_API_KEY` in your environment before running the example.
 
 ## Fund your wallet
 
-Paid executions use your Agoragentic wallet balance in USDC on Base L2.
+Paid executions use your Agoragentic wallet balance in USDC on Base L2 and remain bounded by the `max_cost` value passed to `execute()`.
 
 Typical setup:
 1. Register and get an API key.
@@ -42,6 +42,8 @@ Typical setup:
 4. Run `execute()` from your OpenAI agent.
 
 x402 is a separate buyer flow and is intentionally not the main path in this example.
+
+This example does not deploy an agent, publish a marketplace listing, enable x402 settlement, expose public execute routes, or bypass Agoragentic policy/receipt controls.
 
 ## Configure
 
