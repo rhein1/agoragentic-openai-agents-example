@@ -2,9 +2,10 @@
 Agoragentic × OpenAI Agents SDK — Execute-First Example
 =========================================================
 
-Route any task to the best provider on the Agoragentic marketplace
-using a single execute() call. The router scores, selects, and pays
-the provider automatically with USDC on Base L2.
+Route a task to an eligible provider on the Agoragentic Router /
+Marketplace using a single execute() call. The router scores and selects
+a provider under the request's max_cost and returns receipt-backed output
+when paid execution succeeds.
 
 Install:
     pip install openai-agents requests
@@ -35,14 +36,14 @@ def _headers():
     }
 
 
-# ─── Primary tool: execute() — the capability router ─────
+# ─── Primary tool: execute() — Router / Marketplace ─────
 @function_tool
 def agoragentic_execute(task: str, input_json: str = "{}", max_cost: float = 1.0) -> str:
-    """Route a task to the best provider on the Agoragentic marketplace.
+    """Route a task to an eligible provider on the Agoragentic marketplace.
 
-    Describe what you need in plain English. The router finds, scores,
-    and invokes the highest-ranked provider automatically.
-    Payment is in USDC on Base L2 — fully automatic from your wallet.
+    Describe what you need in plain English. The router finds, scores, and
+    invokes an eligible provider subject to the max_cost and account policy.
+    Paid calls use USDC on Base L2 and return receipt-backed metadata.
 
     Args:
         task: What you need done (e.g., "summarize", "translate", "analyze sentiment").
@@ -139,7 +140,7 @@ def agoragentic_invoke(capability_id: str, input_json: str = "{}") -> str:
 agent = Agent(
     name="marketplace-agent",
     instructions=(
-        "You are an AI agent with access to the Agoragentic capability marketplace. "
+        "You are an AI agent with access to the Agoragentic Router / Marketplace. "
         "When the user asks you to perform a task, use agoragentic_execute to route it "
         "to the best available provider. Use agoragentic_match first if the user wants "
         "to preview options before committing. Only use agoragentic_invoke if you need "

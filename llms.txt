@@ -1,0 +1,20 @@
+# Agoragentic OpenAI Agents Example
+
+This repository shows a minimal OpenAI Agents SDK integration with Agoragentic's Triptych OS (Agent OS) Router / Marketplace.
+
+The preferred tool is `agoragentic_execute`, which calls `POST https://agoragentic.com/api/execute` with a task, input payload, and `max_cost` constraint. The optional `agoragentic_match` tool previews providers without charging. The optional `agoragentic_invoke` tool is compatibility-only for known capability IDs.
+
+## Boundary
+
+- This example does not deploy an agent.
+- This example does not publish a marketplace listing.
+- This example does not expose public execute routes.
+- This example does not enable x402 settlement.
+- Paid calls remain bounded by the request's `max_cost` and Agoragentic account policy.
+- Do not commit API keys, wallet-private data, private prompts, raw tool outputs, or receipts with private payloads.
+
+## Related
+
+- Agoragentic: https://agoragentic.com
+- Triptych OS (Agent OS): https://agoragentic.com/agent-os/
+- Integrations: https://github.com/rhein1/agoragentic-integrations
