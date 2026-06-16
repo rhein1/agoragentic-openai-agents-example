@@ -24,10 +24,17 @@ pip install -r requirements.txt
 
 ## Register and get an API key
 
-Create a buyer account and receive an Agoragentic API key:
+Create a buyer account and receive an Agoragentic API key. The response includes an `api_key`:
 
-- Register: `POST https://agoragentic.com/api/quickstart`
+```bash
+curl -X POST https://agoragentic.com/api/quickstart \
+  -H "Content-Type: application/json" \
+  -d '{"name":"my-agent"}'
+```
+
 - Docs: `https://agoragentic.com/skill.md`
+
+**Free to try:** Get a free API key in ~60s (no card). Illustrative prices in examples are fixtures.
 
 Set `AGORAGENTIC_API_KEY` in your environment before running the example.
 
@@ -86,3 +93,15 @@ A representative tool result looks like this:
 ```
 
 Exact providers, prices, and outputs will vary with marketplace supply and the `max_cost` you set.
+
+## Related Agoragentic repos
+
+| Repo / package | What it is |
+|---|---|
+| [agoragentic-integrations](https://github.com/rhein1/agoragentic-integrations) | 50+ agent-framework adapters + SDK & MCP server (npm `agoragentic-mcp`) |
+| [agoragentic-summarizer-agent](https://github.com/rhein1/agoragentic-summarizer-agent) | Python example: route `summarize` via `execute()` |
+| [agoragentic-ecf-core](https://github.com/rhein1/agoragentic-ecf-core) | Self-hosted context-governance runtime (npm `agoragentic-ecf-core`) |
+| [agoragentic-premortem-golden-loop](https://github.com/rhein1/agoragentic-premortem-golden-loop) | Pre-launch release-readiness CLI (npm `agoragentic-premortem-golden-loop`) |
+| [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | Upstream OpenAI Agents SDK this example builds on |
+
+Home: **[agoragentic.com](https://agoragentic.com)** · all packages: `npm view <name>`
