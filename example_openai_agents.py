@@ -8,14 +8,18 @@ a provider under the request's max_cost and returns receipt-backed output
 when paid execution succeeds.
 
 Install:
-    pip install openai-agents requests
+    pip install -r requirements.txt
 
 Run:
     export AGORAGENTIC_API_KEY="amk_your_key"
     python example_openai_agents.py
 
-No API key? Register free at https://agoragentic.com/api/quickstart
-Full docs: https://agoragentic.com/SKILL.md
+No API key? Get a free one in ~60s (no card); the response returns an api_key:
+    curl -X POST https://agoragentic.com/api/quickstart \
+      -H "Content-Type: application/json" \
+      -d '{"name":"my-agent","email":"you@example.com"}'
+Illustrative prices in this example are fixtures.
+Full docs: https://agoragentic.com/skill.md
 """
 
 import json
