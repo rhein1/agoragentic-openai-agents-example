@@ -12,12 +12,13 @@ Install:
 
 Run:
     export AGORAGENTIC_API_KEY="amk_your_key"
+    export OPENAI_API_KEY="sk-..."   # required: the agent loop runs on an OpenAI model
     python example_openai_agents.py
 
 No API key? Get a free one in ~60s (no card); the response returns an api_key:
     curl -X POST https://agoragentic.com/api/quickstart \
       -H "Content-Type: application/json" \
-      -d '{"name":"my-agent","email":"you@example.com"}'
+      -d '{"name":"my-agent"}'
 Illustrative prices in this example are fixtures.
 Full docs: https://agoragentic.com/skill.md
 """
@@ -41,18 +42,11 @@ def _headers():
 
 
 # ─── Primary tool: execute() — Router / Marketplace ─────
-@function_tool
-def agoragentic_execute(task: str, input_json: str = "{}", max_cost: float = 1.0) -> str:
-    """Route a task to an eligible provider on the Agoragentic marketplace.
+def _execute(task: str, input_json: str = "{}", max_cost: float = 1.0) -> str:
+    """Underlying implementation for the execute tool (plain, unit-testable).
 
-    Describe what you need in plain English. The router finds, scores, and
-    invokes an eligible provider subject to the max_cost and account policy.
-    Paid calls use USDC on Base L2 and return receipt-backed metadata.
-
-    Args:
-        task: What you need done (e.g., "summarize", "translate", "analyze sentiment").
-        input_json: JSON string with the input payload for the provider.
-        max_cost: Maximum price in USDC you're willing to pay per call.
+    Kept separate from the @function_tool wrapper so tests can invoke it
+    directly and assert the request body sent to /api/execute.
     """
     try:
         resp = requests.post(
@@ -77,6 +71,22 @@ def agoragentic_execute(task: str, input_json: str = "{}", max_cost: float = 1.0
         return json.dumps({"error": data.get("error"), "message": data.get("message")})
     except Exception as e:
         return json.dumps({"error": str(e)})
+
+
+@function_tool
+def agoragentic_execute(task: str, input_json: str = "{}", max_cost: float = 1.0) -> str:
+    """Route a task to an eligible provider on the Agoragentic marketplace.
+
+    Describe what you need in plain English. The router finds, scores, and
+    invokes an eligible provider subject to the max_cost and account policy.
+    Paid calls use USDC on Base L2 and return receipt-backed metadata.
+
+    Args:
+        task: What you need done (e.g., "summarize", "translate", "analyze sentiment").
+        input_json: JSON string with the input payload for the provider.
+        max_cost: Maximum price in USDC you're willing to pay per call.
+    """
+    return _execute(task, input_json, max_cost)
 
 
 # ─── Optional: match() — preview providers before committing ──
@@ -157,6 +167,19 @@ agent = Agent(
 # ─── Run ──────────────────────────────────────────────────
 if __name__ == "__main__":
     import asyncio
+    import sys
+
+    # The agent loop runs on an OpenAI model, so the OpenAI Agents SDK needs
+    # OPENAI_API_KEY. Fail fast with a clear message instead of a raw OpenAIError.
+    if not os.environ.get("OPENAI_API_KEY"):
+        print(
+            "OPENAI_API_KEY is required to run this example - the agent loop is "
+            "driven by an OpenAI model. Set it with: export OPENAI_API_KEY=\"sk-...\"\n"
+            "(The free Agoragentic quickstart key is separate and does not cover the "
+            "OpenAI dependency.)",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     async def main():
         result = await Runner.run(

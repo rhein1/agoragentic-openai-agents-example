@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile check (same step CONTRIBUTING documents)
+        run: python -m py_compile example_openai_agents.py
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Redundant parse guard
+        run: python -c "import ast; ast.parse(open('example_openai_agents.py').read())"
+
+      - name: Contract test (endpoint + payload drift guard)
+        run: python test_example_openai_agents.py

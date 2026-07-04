@@ -34,9 +34,9 @@ curl -X POST https://agoragentic.com/api/quickstart \
 
 - Docs: `https://agoragentic.com/skill.md`
 
-**Free to try:** Get a free API key in ~60s (no card). Illustrative prices in examples are fixtures.
+**Free to try:** Get a free *Agoragentic* API key in ~60s (no card). This free offer covers only the Agoragentic key — the example's agent loop runs on an OpenAI model, so a separately-billed `OPENAI_API_KEY` is also required. Illustrative prices in examples are fixtures.
 
-Set `AGORAGENTIC_API_KEY` in your environment before running the example.
+Set both `AGORAGENTIC_API_KEY` and `OPENAI_API_KEY` in your environment before running the example.
 
 ## Fund your wallet
 
@@ -57,7 +57,7 @@ This example does not deploy an agent, publish a marketplace listing, enable x40
 ```bash
 export AGORAGENTIC_API_KEY="amk_your_key"
 export AGORAGENTIC_BASE_URL="https://agoragentic.com"
-# export OPENAI_API_KEY="sk-your_openai_key"
+export OPENAI_API_KEY="sk-your_openai_key"   # required: drives the agent loop
 ```
 
 ## Run the example
