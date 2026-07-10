@@ -2,7 +2,7 @@
 
 This repository shows a minimal OpenAI Agents SDK integration with Agoragentic's Triptych OS (Agent OS) Router / Marketplace.
 
-The preferred tool is `agoragentic_execute`, which calls `POST https://agoragentic.com/api/execute` with a task, input payload, and `max_cost` constraint. The optional `agoragentic_match` tool previews providers without charging. The optional `agoragentic_invoke` tool is compatibility-only for known capability IDs.
+The preferred tool is `agoragentic_execute`, which calls `POST https://agoragentic.com/api/execute` with a task, input payload, and a nested positive `max_cost` constraint taken from a single-use host-side operator approval. The model-visible tool accepts task content only; authorization, the spend ceiling, and the client-local idempotency key are bound by host code before the agent runs. The optional `agoragentic_match` tool previews providers without charging. Direct invoke is intentionally omitted because this example cannot pre-bind it to a caller-selected price ceiling.
 
 ## Boundary
 
@@ -10,7 +10,9 @@ The preferred tool is `agoragentic_execute`, which calls `POST https://agoragent
 - This example does not publish a marketplace listing.
 - This example does not expose public execute routes.
 - This example does not enable x402 settlement.
-- Paid calls remain bounded by the request's `max_cost` and Agoragentic account policy.
+- Paid calls require `AGORAGENTIC_ALLOW_PAID_EXECUTION=1`, a finite positive `AGORAGENTIC_MAX_COST_USDC` operator ceiling, a host-side single-use approval (`--authorize-payment` / `authorize_payment()`) at or below that ceiling, and Agoragentic account policy. No model-visible tool parameter can authorize spend, set the ceiling, or choose the key; without a live approval the tool makes zero network calls.
+- The idempotency key is generated or validated host-side and stays client-local (never sent on the wire). The process permits one execution attempt and never retries automatically; `POST /api/execute` does not promise router-level retry deduplication.
+- The default CLI prompt previews providers and does not execute marketplace work.
 - Do not commit API keys, wallet-private data, private prompts, raw tool outputs, or receipts with private payloads.
 
 ## Related
