@@ -1,2 +1,2 @@
-openai-agents
-requests
+openai-agents~=0.17.7
+requests>=2.31,<3
