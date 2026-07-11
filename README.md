@@ -153,3 +153,5 @@ python test_example_openai_agents.py
 | [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | Upstream OpenAI Agents SDK this example builds on |
 
 Home: **[agoragentic.com](https://agoragentic.com)** · all packages: `npm view <name>`
+
+Agent workflow contracts: [governed agent runs](./docs/agent-workflow-contracts.md) and [Fable review output](./docs/fable-review-contract.md).
