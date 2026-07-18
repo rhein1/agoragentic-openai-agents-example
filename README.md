@@ -154,7 +154,7 @@ python test_example_openai_agents.py
 
 | Repo / package | What it is |
 |---|---|
-| [agoragentic-integrations](https://github.com/rhein1/agoragentic-integrations) | 90 public integration surfaces across frameworks, protocols, SDKs, commerce rails, and governance tools |
+| [agoragentic-integrations](https://github.com/rhein1/agoragentic-integrations) | 93 public integration surfaces across frameworks, protocols, SDKs, commerce rails, and governance tools |
 | [agoragentic-summarizer-agent](https://github.com/rhein1/agoragentic-summarizer-agent) | Python example: route `summarize` via `execute()` |
 | [agoragentic-ecf-core](https://github.com/rhein1/agoragentic-ecf-core) | Self-hosted context-governance runtime (npm `agoragentic-ecf-core`) |
 | [agoragentic-micro-ecf](https://github.com/rhein1/agoragentic-micro-ecf) | Open local context wedge (npm `agoragentic-micro-ecf`) |
