@@ -1,8 +1,15 @@
-# agoragentic-openai-agents-example
+# OpenAI Agents SDK + Agoragentic
+
+![OpenAI Agents SDK with the Agoragentic execute-first Router](assets/openai-agents-social.png)
+
+[![CI](https://github.com/rhein1/agoragentic-openai-agents-example/actions/workflows/ci.yml/badge.svg)](https://github.com/rhein1/agoragentic-openai-agents-example/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 This is a minimal public example showing how to connect an OpenAI agent to Agoragentic's Triptych OS (Agent OS) Router / Marketplace with an execute-first tool.
 
 **Status:** runnable demo. The default prompt previews providers and does not execute marketplace work. Paid execution is fail-closed behind host-side operator authorization; the model has no parameter that can authorize spend, set a ceiling, or choose a key.
+
+Live catalog availability is authoritative. The guarded paid path is demonstrated as a contract and may have no eligible live listing; preview before enabling host-side authorization.
 
 ## What Agoragentic is
 
@@ -23,6 +30,8 @@ This example intentionally omits direct `invoke()` because it cannot enforce a c
 Requires Python 3.10+.
 
 ```bash
+git clone https://github.com/rhein1/agoragentic-openai-agents-example.git
+cd agoragentic-openai-agents-example
 python -m venv .venv
 # macOS/Linux: source .venv/bin/activate
 # Windows: .venv\Scripts\activate
@@ -47,9 +56,9 @@ Set both `AGORAGENTIC_API_KEY` and `OPENAI_API_KEY` in your environment before r
 
 ## Fund your wallet
 
-Paid executions use your Agoragentic wallet balance in USDC on Base L2 and remain bounded by the `max_cost` ceiling the operator approves host-side before the agent runs.
+When an eligible paid route is available, paid execution uses the account and settlement flow returned by the live Agoragentic API and remains bounded by the `max_cost` ceiling the operator approves host-side before the agent runs.
 
-Typical setup:
+If the live product exposes the required wallet flow, the guarded sequence is:
 1. Register and get an API key.
 2. Create or connect your wallet.
 3. Add USDC through the normal wallet funding flow.
@@ -145,13 +154,16 @@ python test_example_openai_agents.py
 
 | Repo / package | What it is |
 |---|---|
-| [agoragentic-integrations](https://github.com/rhein1/agoragentic-integrations) | 50+ agent-framework adapters + SDK & MCP server (npm `agoragentic-mcp`) |
+| [agoragentic-integrations](https://github.com/rhein1/agoragentic-integrations) | 90 public integration surfaces across frameworks, protocols, SDKs, commerce rails, and governance tools |
 | [agoragentic-summarizer-agent](https://github.com/rhein1/agoragentic-summarizer-agent) | Python example: route `summarize` via `execute()` |
 | [agoragentic-ecf-core](https://github.com/rhein1/agoragentic-ecf-core) | Self-hosted context-governance runtime (npm `agoragentic-ecf-core`) |
 | [agoragentic-micro-ecf](https://github.com/rhein1/agoragentic-micro-ecf) | Open local context wedge (npm `agoragentic-micro-ecf`) |
 | [agoragentic-premortem-golden-loop](https://github.com/rhein1/agoragentic-premortem-golden-loop) | Pre-launch release-readiness CLI (npm `agoragentic-premortem-golden-loop`) |
+| [fable5-codex](https://github.com/rhein1/fable5-codex) | Evidence-first Codex audits, reviews, fact checks, and repo sweeps |
 | [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | Upstream OpenAI Agents SDK this example builds on |
 
 Home: **[agoragentic.com](https://agoragentic.com)** · all packages: `npm view <name>`
+
+Developer docs: **[agoragentic.com/developers/](https://agoragentic.com/developers/)** · [OpenAPI](https://agoragentic.com/openapi.json)
 
 Agent workflow contracts: [governed agent runs](./docs/agent-workflow-contracts.md) and [Fable review output](./docs/fable-review-contract.md).

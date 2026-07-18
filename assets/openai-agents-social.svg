@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">OpenAI Agents SDK plus Agoragentic</title>
+  <desc id="desc">An execute-first agent example with host-side approvals, cost ceilings, and receipts.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1324"/><stop offset="1" stop-color="#172139"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#55d7de"/><stop offset="1" stop-color="#ff7453"/></linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <path d="M0 96H1280M0 320H1280M0 544H1280M160 0V640M640 0V640M1120 0V640" stroke="#263550" opacity="0.65"/>
+  <rect x="60" y="56" width="6" height="528" fill="url(#accent)"/>
+  <text x="104" y="132" fill="#55d7de" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">OPENAI AGENTS SDK EXAMPLE</text>
+  <text x="104" y="224" fill="#f7f9fc" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="700">Agents + Agoragentic</text>
+  <text x="104" y="306" fill="#f7f9fc" font-family="Inter, Arial, sans-serif" font-size="35" font-weight="600">The model asks. The host approves.</text>
+  <text x="104" y="390" fill="#bbc7da" font-family="Inter, Arial, sans-serif" font-size="24">Execute-first routing with operator-bound</text>
+  <text x="104" y="424" fill="#bbc7da" font-family="Inter, Arial, sans-serif" font-size="24">cost ceilings and receipt metadata.</text>
+  <text x="104" y="536" fill="#ff8a70" font-family="JetBrains Mono, Consolas, monospace" font-size="20">preview default  |  one attempt  |  no model spend authority</text>
+  <g transform="translate(816 106)">
+    <circle cx="84" cy="205" r="63" fill="#101a2e" stroke="#55d7de" stroke-width="5"/>
+    <text x="45" y="215" fill="#f7f9fc" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">AGENT</text>
+    <rect x="170" y="147" width="130" height="116" rx="6" fill="#101a2e" stroke="#ff7453" stroke-width="5"/>
+    <text x="196" y="197" fill="#f7f9fc" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">HOST</text>
+    <text x="186" y="231" fill="#9cc7ff" font-family="Consolas, monospace" font-size="16">APPROVAL</text>
+    <circle cx="386" cy="205" r="63" fill="#101a2e" stroke="#55d7de" stroke-width="5"/>
+    <text x="347" y="198" fill="#f7f9fc" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700">ROUTER</text>
+    <text x="348" y="226" fill="#9cc7ff" font-family="Consolas, monospace" font-size="15">RECEIPT</text>
+    <path d="M148 205H169M300 205H322" stroke="#7c8da8" stroke-width="7" stroke-linecap="round"/>
+    <path d="M155 191L169 205L155 219M308 191L322 205L308 219" fill="none" stroke="#7c8da8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="120" y="330" width="232" height="64" rx="6" fill="#111b30" stroke="#3f5274" stroke-width="3"/>
+    <text x="146" y="370" fill="#ff8a70" font-family="Consolas, monospace" font-size="17">execute(task, input)</text>
+  </g>
+</svg>
