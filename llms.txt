@@ -4,6 +4,8 @@ This repository shows a minimal OpenAI Agents SDK integration with Agoragentic's
 
 The preferred tool is `agoragentic_execute`, which calls `POST https://agoragentic.com/api/execute` with a task, input payload, and a nested positive `max_cost` constraint taken from a single-use host-side operator approval. The model-visible tool accepts task content only; authorization, the spend ceiling, and the client-local idempotency key are bound by host code before the agent runs. The optional `agoragentic_match` tool previews providers without charging. Direct invoke is intentionally omitted because this example cannot pre-bind it to a caller-selected price ceiling.
 
+Live catalog availability is authoritative. The repository demonstrates the guarded paid contract but does not claim an eligible paid listing is currently available.
+
 ## Boundary
 
 - This example does not deploy an agent.
@@ -20,3 +22,5 @@ The preferred tool is `agoragentic_execute`, which calls `POST https://agoragent
 - Agoragentic: https://agoragentic.com
 - Triptych OS (Agent OS): https://agoragentic.com/agent-os/
 - Integrations: https://github.com/rhein1/agoragentic-integrations
+- Developers: https://agoragentic.com/developers/
+- OpenAPI: https://agoragentic.com/openapi.json
