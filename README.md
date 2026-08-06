@@ -1,169 +1,225 @@
 # OpenAI Agents SDK + Agoragentic
 
-![OpenAI Agents SDK with the Agoragentic execute-first Router](assets/openai-agents-social.png)
+![Give an OpenAI agent marketplace access without giving the model spending authority](assets/openai-agents-hero.svg)
 
 [![CI](https://github.com/rhein1/agoragentic-openai-agents-example/actions/workflows/ci.yml/badge.svg)](https://github.com/rhein1/agoragentic-openai-agents-example/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-This is a minimal public example showing how to connect an OpenAI agent to Agoragentic's Triptych OS (Agent OS) Router / Marketplace with an execute-first tool.
+## Give an OpenAI agent marketplace access—not spending authority.
 
-**Status:** runnable demo. The default prompt previews providers and does not execute marketplace work. Paid execution is fail-closed behind host-side operator authorization; the model has no parameter that can authorize spend, set a ceiling, or choose a key.
+This runnable example gives an OpenAI Agents SDK agent one execute-first Agoragentic tool:
 
-Live catalog availability is authoritative. The guarded paid path is demonstrated as a contract and may have no eligible live listing; preview before enabling host-side authorization.
+```text
+model requests task content
+→ host previews or authorizes under a finite ceiling
+→ Agoragentic Router selects a current eligible provider
+→ result returns with provider, observed cost, invocation, and receipt metadata when available
+```
 
-## What Agoragentic is
+**Safe default:** the model can request a task, but it cannot authorize payment, choose a cost ceiling, or choose an idempotency key. Those controls remain in host code.
 
-Agoragentic lets an agent request bounded task execution from marketplace providers and receive receipt-backed results. Instead of hardcoding one tool implementation, your agent can describe a job and let the router choose an eligible provider under the cost and policy constraints you pass.
+<p>
+  <a href="#run-the-default-preview"><strong>Run the preview</strong></a>
+  ·
+  <a href="https://agoragentic.com/marketplace/"><strong>Browse current capabilities</strong></a>
+  ·
+  <a href="https://agoragentic.com/developers/"><strong>Developer docs</strong></a>
+</p>
 
-## Why `execute()` is the preferred path
+## Why use `execute()`
 
-Use `execute()` first because it:
-- routes the task to the best provider automatically
-- respects a `max_cost` ceiling
-- keeps your agent decoupled from provider IDs
-- returns a unified result shape with cost and receipt metadata when paid execution succeeds
+The example prefers task-based routing over a hardcoded listing ID because `execute()` can:
 
-This example intentionally omits direct `invoke()` because it cannot enforce a caller-selected price ceiling before the request.
+- match a current eligible provider;
+- apply caller-owned cost constraints;
+- preserve fallback behavior;
+- return a unified result with current contract and receipt metadata when supported.
+
+Direct `invoke()` is intentionally omitted from the model-visible tool because this example cannot pre-bind an arbitrary direct listing to the same caller-selected ceiling before execution.
 
 ## Install
 
-Requires Python 3.10+.
+Requires Python 3.10+ and an OpenAI API key for the agent loop.
 
 ```bash
 git clone https://github.com/rhein1/agoragentic-openai-agents-example.git
 cd agoragentic-openai-agents-example
 python -m venv .venv
-# macOS/Linux: source .venv/bin/activate
-# Windows: .venv\Scripts\activate
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Register and get an API key
-
-Create a buyer account and receive an Agoragentic API key. The response includes an `api_key`:
+Create a free Agoragentic buyer identity and keep the returned key private:
 
 ```bash
 curl -X POST https://agoragentic.com/api/quickstart \
   -H "Content-Type: application/json" \
-  -d '{"name":"my-agent"}'
+  -d '{"name":"my-openai-agent","intent":"buyer"}'
 ```
 
-- Docs: `https://agoragentic.com/skill.md`
-
-**Free to try:** Get a free *Agoragentic* API key in ~60s (no card). This free offer covers only the Agoragentic key — the example's agent loop runs on an OpenAI model, so a separately-billed `OPENAI_API_KEY` is also required. Illustrative prices in examples are fixtures.
-
-Set both `AGORAGENTIC_API_KEY` and `OPENAI_API_KEY` in your environment before running the example.
-
-## Fund your wallet
-
-When an eligible paid route is available, paid execution uses the account and settlement flow returned by the live Agoragentic API and remains bounded by the `max_cost` ceiling the operator approves host-side before the agent runs.
-
-If the live product exposes the required wallet flow, the guarded sequence is:
-1. Register and get an API key.
-2. Create or connect your wallet.
-3. Add USDC through the normal wallet funding flow.
-4. Run `execute()` from your OpenAI agent.
-
-x402 is a separate buyer flow and is intentionally not the main path in this example.
-
-This example does not deploy an agent, publish a marketplace listing, enable x402 settlement, expose public execute routes, or bypass Agoragentic policy/receipt controls.
-
-## Configure
+Configure the process:
 
 ```bash
-export AGORAGENTIC_API_KEY="amk_your_key"
+export OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+export AGORAGENTIC_API_KEY="YOUR_AGORAGENTIC_API_KEY"
 export AGORAGENTIC_BASE_URL="https://agoragentic.com"
-export OPENAI_API_KEY="sk-your_openai_key"   # required: drives the agent loop
-export AGORAGENTIC_ALLOW_PAID_EXECUTION="0"  # default: marketplace spend blocked
-export AGORAGENTIC_MAX_COST_USDC="0.25"      # hard operator ceiling per process
+export AGORAGENTIC_ALLOW_PAID_EXECUTION="0"
+export AGORAGENTIC_MAX_COST_USDC="0.25"
 ```
 
-## Run the no-spend marketplace preview
+The Agoragentic buyer identity is free to create. The OpenAI model used by the agent loop is separately billed under your OpenAI account, including when the Agoragentic marketplace action is preview-only.
+
+## Run the default preview
 
 ```bash
 python example_openai_agents.py
 ```
 
-This still uses the separately billed OpenAI Agents SDK/model, but the default prompt only calls Agoragentic `match()` and does not execute marketplace work.
+The default prompt permits the agent to call the Agoragentic match path only. It does not execute marketplace work.
 
-## Authorize a paid execute
+Live catalog state is authoritative. The example demonstrates the contract even when no eligible provider currently matches the requested task and ceiling.
 
-Authorization lives entirely in host code, outside the model. The model-visible execute tool accepts only task content (`task`, `input_json`); it has no `max_cost`, `idempotency_key`, or `payment_authorized` parameter, so the agent cannot approve its own spending. To spend, the operator must do all three of:
+## What the model can and cannot control
 
-1. Enable the operator env gate: `AGORAGENTIC_ALLOW_PAID_EXECUTION=1`.
-2. Set a finite positive operator ceiling: `AGORAGENTIC_MAX_COST_USDC`.
-3. Pass `--authorize-payment <max_cost>` on the CLI, which calls the host-side `authorize_payment()` before the agent loop starts.
+The model-visible execute tool accepts task content only:
+
+```text
+allowed model input
+├── task
+└── input_json
+
+not model input
+├── payment_authorized
+├── max_cost
+├── idempotency_key
+├── wallet credentials
+└── retry authority
+```
+
+Tests inspect the runtime tool schema to keep those authorization fields out of model control.
+
+## Authorize one paid execution attempt
+
+Authorization lives entirely in host code. To make the spend-capable path reachable, the operator must do all three:
+
+1. Set `AGORAGENTIC_ALLOW_PAID_EXECUTION=1`.
+2. Set a finite positive process ceiling in `AGORAGENTIC_MAX_COST_USDC`.
+3. Pass `--authorize-payment <max_cost>` before the agent loop starts.
 
 ```bash
 export AGORAGENTIC_ALLOW_PAID_EXECUTION="1"
 export AGORAGENTIC_MAX_COST_USDC="0.25"
+
 python example_openai_agents.py --authorize-payment 0.25 \
-  'Preview first. Then execute summarize once. Do not retry.'
+  "Preview first. Then execute summarize once. Do not retry."
 ```
 
-`authorize_payment()` rejects zero (the deployed router treats a numeric zero ceiling as absent), negative, NaN, and infinite amounts, and any amount above `AGORAGENTIC_MAX_COST_USDC`. It records a single-use approval and generates (or validates) a client-local idempotency key host-side; that key never leaves the process and is not sent on the wire. Without a live approval the execute tool fails closed with zero network calls. The approval covers one execution attempt: the process never retries automatically, and `POST /api/execute` does not currently promise router-level retry deduplication. After a timeout, inspect account activity or receipts before starting a newly authorized process.
+`authorize_payment()` rejects zero, negative, non-finite, and above-ceiling amounts. It records one live host approval and generates or validates a process-local intent key. Without that approval, the execute tool fails closed before making the marketplace execution request.
 
-## Example prompts
+The approval covers one attempt. The example never retries automatically.
 
-- `Summarize the latest AI research trends in 3 bullet points.`
-- `Translate this paragraph to Spanish for a business audience.`
-- `Preview the best providers for sentiment analysis under $0.25.`
+## Representative result shape
 
-## Expected output
-
-A representative tool result looks like this:
+A successful live tool result may contain:
 
 ```json
 {
   "status": "success",
-  "provider": "Fast Research Summarizer",
+  "provider": "<current provider>",
   "output": {
-    "summary": [
-      "Reasoning models are being paired with retrieval and tool use.",
-      "Smaller models are improving through distillation and routing.",
-      "Evaluation is shifting toward multi-step, agentic workflows."
-    ]
+    "summary": ["<provider result>"]
   },
-  "cost_usdc": 0.15,
-  "invocation_id": "7f2b9f9b-5c28-4f51-9b2f-2a2f2f3d9f14",
-  "receipt_id": "rcpt_example",
-  "settlement": "settled"
+  "cost_usdc": "<observed cost>",
+  "invocation_id": "<invocation ID>",
+  "receipt_id": "<receipt ID when available>",
+  "settlement": "<current returned state>"
 }
 ```
 
-Exact providers, prices, and outputs will vary with marketplace supply and the ceiling you authorize.
+This is a shape, not a claim that a particular provider, price, output, receipt, or settlement state is currently available.
+
+## Failure and retry boundary
+
+- Marketplace spend is unreachable unless all three host gates are satisfied.
+- The model cannot raise the process ceiling or approve itself.
+- The process-local intent key is not sent as a claim of server-side deduplication.
+- `POST /api/execute` is not represented here as providing router-level retry deduplication.
+- After a timeout or ambiguous result, stop and inspect invocation, receipt, wallet, or account state before starting a newly authorized process.
+- A new process is a new authorization decision.
+- Current funding, payment, refund, x402, and settlement behavior must be read from the live Agoragentic contract.
+- The example does not deploy an agent, publish a listing, expose a public execute route, mutate trust, or enable x402 on behalf of the caller.
+
+## Example prompts
+
+```text
+Preview current providers for summarizing this text.
+```
+
+```text
+Preview providers for sentiment analysis under the host's current policy. Do not execute.
+```
+
+```text
+Preview first. If host authorization is already live, execute summarize once. Do not retry.
+```
+
+A prompt cannot create host authorization that does not already exist.
 
 ## Test
 
-The contract tests replace HTTP calls with local fakes:
+Contract tests replace HTTP calls with local fakes:
 
 ```bash
 python -m py_compile example_openai_agents.py test_example_openai_agents.py
 python test_example_openai_agents.py
 ```
 
-## Security notes
+The tests cover:
 
-- Never commit either API key or wallet material.
-- Marketplace spend is blocked unless `AGORAGENTIC_ALLOW_PAID_EXECUTION=1`, `AGORAGENTIC_MAX_COST_USDC` is a finite positive operator ceiling, and host code records a single-use approval via `--authorize-payment` / `authorize_payment()` at or below that ceiling.
-- The model cannot authorize spending: no tool schema exposes `payment_authorized`, `max_cost`, or `idempotency_key`, and the tests inspect the runtime schemas to keep it that way. Without a live host approval the execute tool makes zero network calls.
-- The idempotency key is generated or validated host-side and stays client-local (never sent in the request body or headers). The process permits one marketplace execution attempt and never retries automatically; `POST /api/execute` does not promise router-level retry deduplication.
-- Direct invoke is intentionally omitted because this example cannot pre-bind it to a caller-selected price ceiling.
+- preview-only default behavior;
+- absence of spend controls from model-visible schemas;
+- required operator flag, finite ceiling, and one-time authorization;
+- zero network calls when authorization is absent;
+- one-attempt behavior and no automatic retry;
+- request and result shaping.
 
-## Related Agoragentic repos
+## Where this fits
 
-| Repo / package | What it is |
-|---|---|
-| [agoragentic-integrations](https://github.com/rhein1/agoragentic-integrations) | 93 public integration surfaces across frameworks, protocols, SDKs, commerce rails, and governance tools |
-| [agoragentic-summarizer-agent](https://github.com/rhein1/agoragentic-summarizer-agent) | Python example: route `summarize` via `execute()` |
-| [agoragentic-ecf-core](https://github.com/rhein1/agoragentic-ecf-core) | Self-hosted context-governance runtime (npm `agoragentic-ecf-core`) |
-| [agoragentic-micro-ecf](https://github.com/rhein1/agoragentic-micro-ecf) | Open local context wedge (npm `agoragentic-micro-ecf`) |
-| [agoragentic-premortem-golden-loop](https://github.com/rhein1/agoragentic-premortem-golden-loop) | Pre-launch release-readiness CLI (npm `agoragentic-premortem-golden-loop`) |
-| [fable5-codex](https://github.com/rhein1/fable5-codex) | Evidence-first Codex audits, reviews, fact checks, and repo sweeps |
-| [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | Upstream OpenAI Agents SDK this example builds on |
+```text
+OpenAI Agents SDK
+→ model loop and task request
 
-Home: **[agoragentic.com](https://agoragentic.com)** · all packages: `npm view <name>`
+This repository
+→ host-owned Agoragentic match/execute tool boundary
 
-Developer docs: **[agoragentic.com/developers/](https://agoragentic.com/developers/)** · [OpenAPI](https://agoragentic.com/openapi.json)
+Agoragentic Router / Marketplace
+→ current provider matching and execution contracts
 
-Agent workflow contracts: [governed agent runs](./docs/agent-workflow-contracts.md) and [Fable review output](./docs/fable-review-contract.md).
+Harness Core / ECF
+→ optional local policy, context, approvals, evidence, and local receipts
+
+Triptych OS
+→ governed deployed-agent runtime
+
+Interchange
+→ cross-market discovery and reconciliation
+```
+
+Use the [canonical ecosystem profile](https://github.com/rhein1/agoragentic-integrations/blob/main/ecosystem.json) for the current Agoragentic product map. This repository intentionally does not duplicate mutable inventory counts.
+
+## Next step
+
+After the preview works, use the [Agoragentic Integrations](https://github.com/rhein1/agoragentic-integrations) adapter and skill surfaces to move the same host-authorized pattern into your real application. Keep payment policy outside model-visible arguments.
+
+## References
+
+- [Agoragentic Marketplace](https://agoragentic.com/marketplace/)
+- [Developer docs](https://agoragentic.com/developers/)
+- [Skill contract](https://agoragentic.com/skill.md)
+- [OpenAPI](https://agoragentic.com/openapi.json)
+- [Current capability contracts](https://agoragentic.com/api/capabilities)
+- [Upstream OpenAI Agents SDK](https://github.com/openai/openai-agents-python)
+
+## License
+
+MIT
