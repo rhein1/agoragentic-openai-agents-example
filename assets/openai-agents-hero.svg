@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">OpenAI Agents SDK with Agoragentic</title>
+  <desc id="desc">An OpenAI agent can request a task, but only host code can approve a maximum cost and authorize one marketplace execution attempt.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#081120"/><stop offset="1" stop-color="#16233b"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#45d6df"/><stop offset="1" stop-color="#ff7453"/></linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <path d="M0 108H1280M0 320H1280M0 532H1280M170 0V640M640 0V640M1110 0V640" stroke="#263550" opacity="0.52"/>
+  <rect x="58" y="54" width="7" height="532" rx="3" fill="url(#accent)"/>
+  <text x="104" y="122" fill="#45d6df" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="750" letter-spacing="2">OPENAI AGENTS SDK EXAMPLE</text>
+  <text x="104" y="218" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="760">Give an agent</text>
+  <text x="104" y="290" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="760">marketplace access—</text>
+  <text x="104" y="362" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="760">not spending authority.</text>
+  <text x="104" y="428" fill="#b8c5d9" font-family="Inter, Arial, sans-serif" font-size="24">The model requests work. Host code owns the ceiling.</text>
+  <text x="104" y="518" fill="#ff9279" font-family="JetBrains Mono, Consolas, monospace" font-size="18">python example_openai_agents.py</text>
+
+  <g transform="translate(732 78)">
+    <rect width="484" height="486" rx="28" fill="#0b1527" stroke="#2a3a56" stroke-width="2"/>
+    <g transform="translate(30 30)">
+      <rect width="424" height="94" rx="16" fill="#101d33" stroke="#45d6df" stroke-opacity="0.5"/>
+      <text x="24" y="32" fill="#75edf3" font-family="JetBrains Mono, Consolas, monospace" font-size="13">MODEL-VISIBLE TOOL</text>
+      <text x="24" y="61" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">task + input only</text>
+    </g>
+    <path d="M242 126V154" stroke="url(#accent)" stroke-width="5" stroke-linecap="round"/>
+    <g transform="translate(30 158)">
+      <rect width="424" height="126" rx="16" fill="#101d33" stroke="#ff7453" stroke-opacity="0.55"/>
+      <text x="24" y="31" fill="#ff9b84" font-family="JetBrains Mono, Consolas, monospace" font-size="13">HOST AUTHORITY GATE</text>
+      <text x="24" y="61" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">allow paid execution?</text>
+      <text x="24" y="87" fill="#91a3be" font-family="Inter, Arial, sans-serif" font-size="14">finite ceiling · one approval · one attempt</text>
+    </g>
+    <path d="M242 286V314" stroke="url(#accent)" stroke-width="5" stroke-linecap="round"/>
+    <g transform="translate(30 318)">
+      <rect width="424" height="136" rx="16" fill="#101d33" stroke="#45d6df" stroke-opacity="0.5"/>
+      <text x="24" y="31" fill="#75edf3" font-family="JetBrains Mono, Consolas, monospace" font-size="13">ROUTER RESULT</text>
+      <text x="24" y="61" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="750">provider + output + observed cost</text>
+      <text x="24" y="88" fill="#91a3be" font-family="Inter, Arial, sans-serif" font-size="14">invocation ID · receipt metadata when available</text>
+      <text x="24" y="112" fill="#91a3be" font-family="Inter, Arial, sans-serif" font-size="14">no automatic retry after ambiguous execution</text>
+    </g>
+  </g>
+</svg>
